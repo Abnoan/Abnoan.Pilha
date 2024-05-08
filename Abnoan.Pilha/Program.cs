@@ -25,6 +25,10 @@ internal class Program
         // Retorna o elemento no topo sem removê-lo
         var elementoTopo = pilhaDeNumeros.Peek();
 
+        // Limpa todos os elementos da pilha
+        pilhaDeNumeros.Clear();
+
+
         if (pilhaDeNumeros.Count > 0)
         {
             topo = pilhaDeNumeros.Pop();
@@ -53,46 +57,18 @@ internal class Program
         #region Vamos Praticar?
         //Criar uma simulação de sistema de navegação de páginas, 
         //onde as ações de avançar e voltar são controladas por pilhas.
-        Stack<string> historicoNavegacao = new Stack<string>();
-        historicoNavegacao.Push("HomePage");
-        historicoNavegacao.Push("AboutPage");
-        Console.WriteLine("Voltando para: " + historicoNavegacao.Pop());
+        //Ao final limpe toda a pilha.
 
 
         //Sistema de Recomendação de Livros
-        Stack<string> pilhaLivrosLidos = new Stack<string>();
-        Dictionary<string, List<string>> livrosPorGenero = new Dictionary<string, List<string>>();
-
-        pilhaLivrosLidos.Push("Ficção Científica: Duna");
-        pilhaLivrosLidos.Push("Fantasia: Senhor dos Anéis");
-
-        var generoComum = "Ficção Científica";
-        var proximoLivro = livrosPorGenero[generoComum].FirstOrDefault();
-        Console.WriteLine($"Próximo livro recomendado do gênero {generoComum}: {proximoLivro}");
+   
 
         //Gerenciador de Eventos
-        Stack<Evento> pilhaEventos = new Stack<Evento>();
-        Dictionary<string, Queue<Evento>> eventosPorTipo = new Dictionary<string, Queue<Evento>>();
 
-        // Adicionando eventos
-        var evento1 = new Evento { Tipo = "Conferência", Descricao = "Conferência de Tecnologia" };
-        pilhaEventos.Push(evento1);
-        if (!eventosPorTipo.ContainsKey(evento1.Tipo))
-            eventosPorTipo[evento1.Tipo] = new Queue<Evento>();
-        eventosPorTipo[evento1.Tipo].Enqueue(evento1);
-
-        // Processando eventos
-        while (pilhaEventos.Count > 0)
-        {
-            var evento = pilhaEventos.Pop();
-            var fila = eventosPorTipo[evento.Tipo];
-            var eventoParaProcessar = fila.Dequeue();
-            Console.WriteLine($"Processando evento: {eventoParaProcessar.Descricao}");
-        }
         #endregion
 
         #region Exercicio
-        
+
         // Cria uma instância do editor
         Editor editor = new Editor();
 
@@ -112,7 +88,7 @@ internal class Program
         sessao2.ExecutarAcao(new Acao("Escrever 'Aprendendo pilhas'"));
 
         // Desfazer a última ação em ambas as sessões
-        Console.WriteLine("\nDesfazendo na sessão 1...");
+        Console.WriteLine("Desfazendo na sessão 1...");
         sessao1.Desfazer();
         Console.WriteLine("Desfazendo na sessão 2...");
         sessao2.Desfazer();
@@ -139,11 +115,11 @@ internal class Program
         }
 
         // Listar as sessões abertas
-        Console.WriteLine("\nSessões abertas no editor:");
+        Console.WriteLine("Sessões abertas no editor:");
         editor.ListarSessoesAbertas();
 
         // Fechar uma sessão e listar as restantes
-        Console.WriteLine("\nFechando a sessão 1...");
+        Console.WriteLine("Fechando a sessão 1...");
         editor.FecharSessao("1");
         Console.WriteLine("Sessões abertas após fechar a sessão 1:");
         editor.ListarSessoesAbertas();
