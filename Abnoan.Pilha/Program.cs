@@ -55,15 +55,23 @@ internal class Program
         #endregion
 
         #region Vamos Praticar?
-        //Criar uma simulação de sistema de navegação de páginas, 
-        //onde as ações de avançar e voltar são controladas por pilhas.
-        //Ao final limpe toda a pilha.
+        Stack<string> historico = new();
+        Dictionary<string, List<string>> biblioteca = [];
 
+        biblioteca.Add("Ficção", new List<string>() { "Duna", "Harry Potter 1", "Narnia" });
+        biblioteca.Add("Ação", new List<string>() { "MIB", "Duro de Matar", "O poderoso chefao" });
+        biblioteca.Add("Historia", new List<string>() { "A Mumia", "Crespulo", "Alexandre, o grande" });
+        biblioteca.Add("Terror", new List<string>() { "Colheita Maldita" });
 
-        //Sistema de Recomendação de Livros
-   
+        AdicionarLivroLido(ref historico, ref biblioteca, "Terror", "Sexta Feira 13");
+        AdicionarLivroLido(ref historico, ref biblioteca, "Terror", "Panico");
+        AdicionarLivroLido(ref historico, ref biblioteca, "Ficção", "Interstellar");
+        AdicionarLivroLido(ref historico, ref biblioteca, "Ação", "Velozes e Furiosos");
+        AdicionarLivroLido(ref historico, ref biblioteca, "Historia", "Cleopatra");
 
-        //Gerenciador de Eventos
+        var livroPraLer = RecomendarProximoLivro(historico, biblioteca);
+        Console.WriteLine(livroPraLer);
+        Console.WriteLine();
 
         #endregion
 
@@ -125,5 +133,41 @@ internal class Program
         editor.ListarSessoesAbertas();
 
         #endregion
+    }
+
+    static void AdicionarLivroLido(ref Stack<string> historico,
+    ref Dictionary<string, List<string>> livros, string genero, string livro)
+    {
+        historico.Push(livro);
+
+        if (!livros.ContainsKey(genero))
+        {
+            livros[genero] = new List<string>();
+        }
+
+        livros[genero].Add(livro);
+    }
+
+    static string RecomendarProximoLivro(Stack<string> historico,
+    Dictionary<string, List<string>> livros)
+    {
+        //var contador = 0;
+        Dictionary<string, int> contador = new();
+        foreach (var livroLido in historico)
+        {
+            string genero = livros.FirstOrDefault(s => s.Value.Contains(livroLido)).Key;
+            if (contador.ContainsKey(genero))
+            {
+                contador[genero]++;
+            }
+            else
+            {
+                contador[genero] = 1;
+            }
+        }
+        var generoMaisFrequente = contador.OrderByDescending(cont => cont.Value).First().Key;
+
+        var livrosNLidos = livros[generoMaisFrequente].Except(historico).ToList();
+        return livrosNLidos.First();
     }
 }
